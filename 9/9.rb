@@ -4,13 +4,11 @@ Free = Struct.new(:start_idx, :size)
 @blocks = []
 @frees = []
 File.readlines('in.txt', chomp: true).each do |line|
-  block_idx = 0
   len = 0
   line.each_char.with_index do |c, idx|
     val = c.to_i
     if idx.even?
-      @blocks << Block.new(block_idx, len, val)
-      block_idx += 1
+      @blocks << Block.new(idx / 2, len, val)
     else
       @frees << Free.new(len, val)
     end
