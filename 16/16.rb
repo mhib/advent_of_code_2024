@@ -77,7 +77,7 @@ def part2
 
   visited = Set[@start, @dest]
 
-  0.upto(3) do |dir|
+  DELTAS.each_index do |dir|
     dists2, dist2 = dijkstra([@dest, dir]) { |e| e == [@start, 2] }
     next if dist2 != dist
 
