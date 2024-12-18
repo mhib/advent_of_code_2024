@@ -102,7 +102,7 @@ def part2
       ny = y + dy
       nx = x + dx
       next if ny < 0 || ny >= LEN
-      next if nx < 0 || nx >= LEN
+      next if nx < 0 || nx >= WID
       next unless visited.include?([ny, nx])
       union[to_id[ny, nx], id]
     end
