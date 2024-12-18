@@ -71,6 +71,7 @@ def reg_a(val)
     simulate(regs)
 end
 
+# observation: 3-bit sequence sets one output value
 def part2
   out_idx = @commands.size - 1
 
