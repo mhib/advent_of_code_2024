@@ -50,12 +50,10 @@ NEIS2 = [
 ]
 
 def part2
-  sets_size = LEN * WID + 4
+  sets_size = LEN * WID + 2
 
-  north = LEN * WID
-  west  = LEN * WID + 1
-  south = LEN * WID + 2
-  east  = LEN * WID + 3
+  north_east = LEN * WID
+  south_west = LEN * WID + 1
 
   sets = (0...sets_size).to_a
 
@@ -83,19 +81,19 @@ def part2
     visited << [y, x]
     id = to_id[y, x]
     if y == 0
-      union[north, id]
+      union[north_east, id]
     end
 
     if y == LEN - 1
-      union[south, id]
+      union[south_west, id]
     end
 
     if x == 0
-      union[west, id]
+      union[south_west, id]
     end
 
     if x == WID - 1
-      union[east, id]
+      union[north_east, id]
     end
 
     NEIS2.each do |dy, dx|
@@ -107,7 +105,7 @@ def part2
       union[to_id[ny, nx], id]
     end
 
-    if find[north] == find[south] || find[west] == find[north] || find[west] == find[east]
+    if find[north_east] == find[south_west]
       return "#{x},#{y}"
     end
   end
