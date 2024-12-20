@@ -79,7 +79,8 @@ def with_cheating_of_at_most_cheats(cheats, saved)
   start_dist = dists[@start[0]][@start[1]]
 
   q = [@start]
-  visited = Set.new(q)
+  visited = Array.new(len) { Array.new(wid) }
+  visited[@start[0]][@start[1]] = true
   steps = 0
 
   deltas = generate_deltas(cheats)
@@ -110,9 +111,9 @@ def with_cheating_of_at_most_cheats(cheats, saved)
         nx = x + dx
 
         next if @board[ny][nx] == '#'
-        key = [ny, nx]
-        next unless visited.add?(key)
-        q << key
+        next if visited[ny][nx]
+        visited[ny][nx] = true
+        q << [ny, nx]
       end
     end
     steps += 1
