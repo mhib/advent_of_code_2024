@@ -21,11 +21,13 @@ File.readlines('in.txt', chomp: true).each_with_index do |line, y|
 end
 
 def get_distance
+  len = @board.size
+  wid = @board[0].size
   steps = 1
 
   q = [@stop]
-  dists = {}
-  dists[@stop] = 0
+  dists = Array.new(len) { Array.new(wid) }
+  dists[@stop[0]][@stop[1]] = 0
   while q.any?
     q.size.times do
       y, x = q.shift
@@ -35,14 +37,13 @@ def get_distance
         nx = x + dx
 
         next if @board[ny][nx] == '#'
-        key = [ny, nx]
         if ny == @start[0] && nx == @start[1]
-          dists[key] = steps
+          dists[ny][nx] = steps
           break
         end
-        next if dists.include?(key)
-        dists[key] = steps
-        q << key
+        next if dists[ny][nx]
+        dists[ny][nx] = steps
+        q << [ny, nx]
       end
     end
     steps += 1
@@ -75,7 +76,7 @@ def with_cheating_of_at_most_cheats(cheats, saved)
   wid = @board[0].size
 
   dists = get_distance
-  start_dist = dists[@start]
+  start_dist = dists[@start[0]][@start[1]]
 
   q = [@start]
   visited = Set.new(q)
@@ -98,7 +99,7 @@ def with_cheating_of_at_most_cheats(cheats, saved)
 
           next if ny < 0 || ny >= len
           next if nx < 0 || nx >= wid
-          if (dists[[ny, nx]] || 1.0 / 0) + steps + cost <= start_dist - saved
+          if (dists[ny][nx] || 1.0 / 0) + steps + cost <= start_dist - saved
             count += 1
           end
         end
