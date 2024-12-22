@@ -22,7 +22,7 @@ def part2
   hash_mask = ((1 << 20) - 1)
   seq_sum = Hash.new(0)
   @input.each do |l|
-    seq_vals = {}
+    seen = Set.new
     prev = l % 10
     hash = 0
     2000.times do |i|
@@ -34,12 +34,9 @@ def part2
       hash |= (diff + 10)
       hash &= hash_mask
 
-      if i > 2 && !seq_vals.key?(hash)
-        seq_vals[hash] = current
+      if i > 2 && seen.add?(hash)
+        seq_sum[hash] += current
       end
-    end
-    seq_vals.each do |k, v|
-      seq_sum[k] += v
     end
   end
   seq_sum.each_value.max
