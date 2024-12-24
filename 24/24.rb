@@ -61,7 +61,6 @@ def part1
       end
     end
   end
-  p calculated_values.filter { |k, v| k[0] == 'z'}
   calculated_values.filter { |k, v| k[0] == 'z'}.sort.reverse.map(&:last).join("").to_i(2)
 end
 
@@ -83,7 +82,7 @@ def generate_pairings(arr)
   res
 end
 
-# This is not a general algorithm bot works for the inputs
+# This is not a general algorithm bot works for my inputs
 def part2
   prev_carry = @rules.find { |c| c.inputs == Set['x00', 'y00'] && c.op == :& }.output
 
@@ -98,31 +97,27 @@ def part2
       x = 'x' + id
       z = 'z' + ((num).to_s.rjust(2, '0'))
       current_sum = @rules.find { |c| c.inputs == Set[x, y] && c.op == :^ }.output
-      # p [num, current_sum]
       res_sum = @rules.find { |c| c.output == z && c.op == :^ }
       candidate_sum = @rules.find { |c| c.inputs == Set[current_sum, prev_carry] && c.op == :^ }
       if candidate_sum.nil?
-        candidates += (res_sum.inputs ^ Set[current_sum, prev_carry])
+        candidates.merge(res_sum.inputs ^ Set[current_sum, prev_carry])
       end
-      # p [num, res_sum]
       current_carry = @rules.find { |c| c.inputs == Set[x, y] && c.op == :& }.output
-      # p [num, current_carry]
       sum_carry = @rules.find { |c| c.inputs == Set[current_sum, prev_carry] && c.op == :& }
       if sum_carry.nil?
         sum_carry = @rules.find { |c| (c.inputs & Set[current_sum, prev_carry]).any? && c.op == :& } 
-        candidates += (sum_carry.inputs ^ Set[current_sum, prev_carry])
+        candidates.merge(sum_carry.inputs ^ Set[current_sum, prev_carry])
       end
       sum_carry = sum_carry.output
-      # p [num, sum_carry]
       new_carry = @rules.find { |c| c.inputs == Set[current_carry, sum_carry] && c.op == :| }
       if new_carry.nil?
         new_carry = @rules.find { |c| (c.inputs & Set[current_carry, sum_carry]).any? && c.op == :| }
-        candidates += (new_carry.inputs ^ Set[current_carry, sum_carry])
+        candidates.merge(new_carry.inputs ^ Set[current_carry, sum_carry])
       end
       prev_carry = new_carry.output
   end
   candidates.sort.join(",")
 end
 
-# p part1
+p part1
 p part2
