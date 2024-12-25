@@ -10,7 +10,7 @@ end
 
 def part1
     @questions.sum do |q|
-        res = Matrix[[q.a[0], q.b[0]], [q.a[1], q.b[1]]].inv * Vector[*q.target]
+        res = Matrix[[q.a[0], q.b[0]], [q.a[1], q.b[1]]].lup.solve(q.target)
         next 0 unless res.all? { |x| x == x.to_i }
         (res[0] * 3 + res[1]).to_i
     end
@@ -22,7 +22,7 @@ def part2
         res = Matrix[
             [q.a[0], q.b[0]],
             [q.a[1], q.b[1]]
-        ].inv * Vector[*q.target.map(&add)]
+        ].lup.solve(q.target.map(&add))
         next 0 unless res.all? { |x| x == x.to_i }
         (res[0] * 3 + res[1]).to_i
     end
